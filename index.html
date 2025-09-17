@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Список задач</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header class="main-header">
+        <h1>Список задач</h1>
+    </header>
+
+    <main class="app-container">
+        <section class="new-task-section">
+            <h2>Новая задача</h2>
+            <form class="add-task-form">
+                <input type="text" placeholder="Название задачи...">
+                <button type="submit">Добавить</button>
+            </form>
+        </section>
+
+        <section class="task-board">
+            
+            <div class="task-column">
+                <div class="status-label status-backlog">Бэклог</div>
+                <div class="tasks-wrapper">
+                    <div class="task-item">Выучить JS</div>
+                    <div class="task-item">Выучить React</div>
+                    <div class="task-item">Сделать домашку</div>
+                </div>
+            </div>
+
+            <div class="task-column">
+                <div class="status-label status-in-progress">В процессе</div>
+                 <div class="tasks-wrapper">
+                    <div class="task-item">Выпить чая</div>
+                    <div class="task-item">Попить воды</div>
+                </div>
+            </div>
+
+            <div class="task-column">
+                <div class="status-label status-done">Готово</div>
+                 <div class="tasks-wrapper">
+                    <div class="task-item">Позвонить маме</div>
+                    <div class="task-item">Погладить кота</div>
+                </div>
+            </div>
+
+            <div class="task-column">
+                <div class="status-label status-trash">Корзина</div>
+                 <div class="tasks-wrapper">
+                    <div class="task-item">Сходить погулять</div>
+                    <div class="task-item">Прочитать Войну и Мир</div>
+                </div>
+                <button class="clear-btn">Очистить</button>
+            </div>
+
+        </section>
+    </main>
+
+</body>
+</html>

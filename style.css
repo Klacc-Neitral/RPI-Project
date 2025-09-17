@@ -1,0 +1,163 @@
+/* a. ОБЩИЙ СТИЛЬ ДЛЯ ВСЕГО ДОКУМЕНТА */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #eaf5f5;
+    color: #333;
+    padding: 20px;
+}
+
+.main-header {
+    background-color: #4a90e2;
+    color: white;
+    padding: 15px 30px;
+    border-radius: 12px;
+    text-align: left;
+    margin-bottom: 30px;
+    box-shadow: 110 400px 100px rgba(1, 253, 127, 0.05);
+}
+
+.main-header h1 {
+    font-size: 24px;
+    font-weight: 500;
+}
+
+/* b. СТИЛЬ ДЛЯ ДОБАВЛЕНИЯ ЗАДАЧИ */
+.new-task-section {
+    background-color: #ffffff;
+    padding: 25px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+}
+
+.new-task-section h2 {
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+.add-task-form {
+    display: flex;
+    gap: 15px;
+}
+
+.add-task-form input {
+    flex-grow: 1;
+    padding: 12px 15px;
+    border: 1px solid #dfe3e9;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.add-task-form input:focus {
+    outline: none;
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+}
+
+.add-task-form button {
+    background-color: #4a90e2;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.add-task-form button:hover {
+    background-color: #357abd;
+}
+
+/* d. СТИЛЬ ДЛЯ ОБЛАСТИ С ЗАДАЧАМИ */
+.task-board {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+}
+
+.task-column {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+}
+
+.status-label {
+    display: inline-block;
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+.status-backlog {
+    background-color: #f2f2f2;
+    color: #555;
+}
+
+.status-in-progress {
+    background-color: #e9f3fe;
+    color: #4a90e2;
+}
+
+.status-done {
+    background-color: #e4f8f0;
+    color: #2e9a6e;
+}
+
+.status-trash {
+    background-color: #fdeeee;
+    color: #d0021b;
+}
+
+/* c. СТИЛЬ ДЛЯ ЗАДАЧИ */
+.tasks-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    min-height: 100px; /* Для сохранения высоты пустых колонок */
+}
+
+.task-item {
+    background-color: #ffffff;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+    font-size: 15px;
+    cursor: grab;
+    transition: box-shadow 0.3s ease;
+}
+
+.task-item:hover {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+}
+
+/* e. СТИЛЬ ДЛЯ КНОПКИ "ОЧИСТИТЬ" */
+.clear-btn {
+    width: 100%;
+    margin-top: 20px;
+    background-color: #d0021b;
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.clear-btn:hover {
+    background-color: #a80015;
+}
