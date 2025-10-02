@@ -1,28 +1,35 @@
 import {createElement} from '../framework/render.js'; 
 
 
-function createHeaderComponentTemplate() {
+function createTaskComponentTemplate(task) {
+    const {title} = task;
     return (
-        `<div class="task-item">Выучить JS</div>`
-      );
+        ` 
+                    <div class="task-item">
+                        ${title}
+                    </div>`
+    );
 }
 
 
-export default class HeaderComponent {
+export default class TaskComponent {
+  constructor({task}) {
+      this.task = task;
+  }
+
   getTemplate() {
-    return createHeaderComponentTemplate();
+      return createTaskComponentTemplate(this.task);
   }
 
 
   getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
+      if (!this.element) {
+          this.element = createElement(this.getTemplate());
+      }
 
 
-    return this.element;
+      return this.element;
   }
-
 
   removeElement() {
     this.element = null;
