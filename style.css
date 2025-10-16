@@ -83,6 +83,7 @@ body {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 25px;
+    align-items: start;
 }
 
 .task-column {
@@ -90,6 +91,7 @@ body {
     padding: 20px;
     border-radius: 12px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+    justify-content: flex-start;
 }
 
 .status-label {
@@ -121,12 +123,19 @@ body {
     color: #d0021b;
 }
 
-/* c. СТИЛЬ ДЛЯ ЗАДАЧИ */
+.plug {
+  text-align: center;
+  color: #999;
+  font-style: italic;
+  padding: 10px 0;
+}
+
+
 .tasks-wrapper {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    min-height: 100px; 
+/*    min-height: 100px; */
 }
 
 .task-item {
