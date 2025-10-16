@@ -7,21 +7,23 @@ import ClearButtonComponent from "../view/clearButt-Component.js";
 import PlugComponent from "../view/Plug-component.js";
 
 export default class TaskBoardPresenter {
-  #clearBtnComponent = new ClearButtonComponent();
+  #clearBtnComponent = new ClearButtonComponent({
+        onClick: this.handleClearButtonClick
+    });
   #boardContainer = null;
   #tasksModel = null;
   #plugComponent = new PlugComponent();
 
   #tasksBoardComponent = new TaskBoardComponent();
-  #boardTasks = [];
 
   constructor({ boardContainer, tasksModel }) {
     this.#boardContainer = boardContainer;
     this.#tasksModel = tasksModel;
+
+    this.#tasksModel.addObserver(this.#handleModelChange.bind(this))
   }
 
   init() {
-    this.#boardTasks = [...this.#tasksModel.tasks];
     this.#renderBoard();
     }
   #renderPlugComponent(tasks, container) {
@@ -30,9 +32,12 @@ export default class TaskBoardPresenter {
     }
   }
 
-  #renderClearButton(status, container){
-    if(status === Status.TRASH) {
-      render(this.#clearBtnComponent, container);
+  #renderClearButton(status, container, tasks) {
+    if (status === Status.TRASH && tasks.length > 0) {
+      const clearBtnComponent = new ClearButtonComponent({
+        onClick: () => this.#handleClearTrash()
+      });
+      render(clearBtnComponent, container);
     }
   }
 
@@ -40,6 +45,17 @@ export default class TaskBoardPresenter {
     const tasksListComponent = new TaskListComponent(status, StatusLabel[status]);
     render (tasksListComponent, container);
     return tasksListComponent;
+  }
+
+  createTask() {
+    const taskTitle = document.querySelector('.add-task-form input').value.trim();
+    if (!taskTitle) {
+      return;
+    }  
+
+    this.#tasksModel.addTask(taskTitle);
+
+    document.querySelector('.add-task-form input').value = '';
   }
   
   #renderTask(task, container) {
@@ -52,7 +68,7 @@ export default class TaskBoardPresenter {
         Object.values(Status).forEach((status) => {
           const tasksListComponent = this.#renderTasksList(status, this.#tasksBoardComponent.element)
           
-          const filteredTasks = this.#boardTasks.filter(task => task.status === status)
+          const filteredTasks = this.tasks.filter(task => task.status === status)
 
           this.#renderPlugComponent(filteredTasks, tasksListComponent.element);
 
@@ -60,12 +76,23 @@ export default class TaskBoardPresenter {
             this.#renderTask(task, tasksListComponent.element);
           });
 
-          this.#renderClearButton(status, tasksListComponent.element)
+          this.#renderClearButton(status, tasksListComponent.element, filteredTasks);
         });
       }
-
-        
-          
-        
+  #handleModelChange() {
+    this.#clearBoard();
+    this.#renderBoard();
   }
+
+  #clearBoard() {
+        this.#tasksBoardComponent.element.innerHTML = '';
+    }
+
+  #handleClearTrash() {
+  this.#tasksModel.clearBucket();
+}
+  get tasks() {
+    return this.#tasksModel.tasks;
+  }
+} 
     

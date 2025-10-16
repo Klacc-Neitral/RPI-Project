@@ -33,6 +33,12 @@ export const tasks = [
         id:'7',
         title:'Покушать',
         status:'done'
-    }
+    },
+    {
+        id:'8',
+        title:'Отчаяться',
+        status:'trash',
+    },
+    
 
 ]
