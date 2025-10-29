@@ -41,10 +41,15 @@ export default class TaskBoardPresenter {
     }
   }
 
-  #renderTasksList(status, container){
-    const tasksListComponent = new TaskListComponent(status, StatusLabel[status]);
-    render (tasksListComponent, container);
-    return tasksListComponent;
+  #renderTasksList(status, container) {
+      const tasksListComponent = new TaskListComponent(
+          status, 
+          StatusLabel[status], 
+          this.#handleTaskDrop.bind(this));
+
+      render(tasksListComponent, container)
+
+      return tasksListComponent
   }
 
   createTask() {
@@ -94,5 +99,10 @@ export default class TaskBoardPresenter {
   get tasks() {
     return this.#tasksModel.tasks;
   }
+
+  #handleTaskDrop(taskId, newStatus, afterTaskId) {
+      this.#tasksModel.updateTaskStatus(taskId, newStatus, afterTaskId);
+  }
+
 } 
     

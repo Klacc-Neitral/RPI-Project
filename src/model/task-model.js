@@ -16,7 +16,7 @@ export default class TasksModel {
     addTask(title) {
         const newTask = {
             title,
-            status: 'backlog',
+            status: 'backLog',
             id: generateID(),
         };
 
@@ -41,4 +41,27 @@ export default class TasksModel {
     _notifyObservers() {
         this.#observers.forEach((observer) => observer())
     }
+
+    updateTaskStatus(taskId, newStatus, afterTaskId = null) {
+        const task = this.#boardTasks.find(task => task.id === taskId);
+        if (!task) return;
+
+        task.status = newStatus;
+
+        this.#boardTasks = this.#boardTasks.filter(t => t.id !== taskId);
+
+        if (afterTaskId) {
+            const index = this.#boardTasks.findIndex(t => t.id === afterTaskId);
+            if (index !== -1) {
+                this.#boardTasks.splice(index, 0, task);
+            } else {
+                this.#boardTasks.push(task);
+            }
+        } else {
+            this.#boardTasks.push(task);
+        }
+
+        this._notifyObservers();
+    }
+
 }
