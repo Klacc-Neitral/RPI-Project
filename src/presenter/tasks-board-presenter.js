@@ -5,6 +5,8 @@ import { render } from "../framework/render.js";
 import { Status, StatusLabel } from "../const.js";
 import ClearButtonComponent from "../view/clearButt-Component.js";
 import PlugComponent from "../view/Plug-component.js";
+import LoadingViewComponent from "../view/loadingViewComponent.js";
+import { UserAction } from "../const.js";
 
 export default class TaskBoardPresenter {
   #clearBtnComponent = new ClearButtonComponent({
@@ -12,6 +14,7 @@ export default class TaskBoardPresenter {
     });
   #boardContainer = null;
   #tasksModel = null;
+  #loadingComponent = null;
   #plugComponent = new PlugComponent();
 
   #tasksBoardComponent = new TaskBoardComponent();
@@ -23,8 +26,20 @@ export default class TaskBoardPresenter {
     this.#tasksModel.addObserver(this.#handleModelChange.bind(this))
   }
 
-  init() {
-    this.#renderBoard();
+    async init() {
+        this.#showLoading();
+        try {
+            await this.#tasksModel.init();
+            this.#clearBoard();
+
+            this.#renderBoard()
+        } catch (err) {
+            console.error('Ошибка при инициализации доски: ', err)
+        }
+        finally{
+          this.#hideLoading()
+        }
+
     }
   #renderPlugComponent(tasks, container) {
     if (tasks.length === 0) {
@@ -52,16 +67,20 @@ export default class TaskBoardPresenter {
       return tasksListComponent
   }
 
-  createTask() {
-    const taskTitle = document.querySelector('.add-task-form input').value.trim();
-    if (!taskTitle) {
-      return;
-    }  
+    async createTask() {
+        const taskTitle = document.querySelector('.inputTask').value.trim();
 
-    this.#tasksModel.addTask(taskTitle);
+        if (!taskTitle)
+            return;
+        try {
+            await this.#tasksModel.addTask(taskTitle);
+            document.querySelector('.inputTask').value = '';
 
-    document.querySelector('.add-task-form input').value = '';
-  }
+        } catch (err) {
+            console.error('Ошибка при создании задачи: ', err);
+        }
+
+    }
   
   #renderTask(task, container) {
     const taskComponent = new TaskComponent({task});
@@ -84,14 +103,51 @@ export default class TaskBoardPresenter {
           this.#renderClearButton(status, tasksListComponent.element, filteredTasks);
         });
       }
-  #handleModelChange() {
-    this.#clearBoard();
-    this.#renderBoard();
-  }
+    #handleModelChange(event) {
+        switch (event) {
+            case UserAction.LOADING_START:
+                this.#showLoading();
+                break;
+
+            case UserAction.LOADING_END:
+                this.#hideLoading();
+                break;
+
+            case UserAction.ADD_TASK:
+            case UserAction.UPDATE_TASK:
+            case UserAction.DELETE_TASK:
+                this.#clearBoard();
+                this.#renderBoard();
+                this.#hideLoading();
+                break;
+        }
+    }
 
   #clearBoard() {
         this.#tasksBoardComponent.element.innerHTML = '';
     }
+
+  #showLoading() {
+    if (!this.#loadingComponent) {
+        this.#loadingComponent = new LoadingViewComponent();
+        render(this.#loadingComponent, this.#boardContainer);
+    }
+
+    if (this.#tasksBoardComponent?.element) {
+        this.#tasksBoardComponent.element.classList.add('hidden');
+    }
+}
+
+  #hideLoading() {
+    if (this.#loadingComponent) {
+        this.#loadingComponent.element.remove();
+        this.#loadingComponent = null;
+    }
+
+    if (this.#tasksBoardComponent?.element) {
+        this.#tasksBoardComponent.element.classList.remove('hidden');
+    }
+  }
 
   #handleClearTrash() {
   this.#tasksModel.clearBucket();
@@ -100,9 +156,12 @@ export default class TaskBoardPresenter {
     return this.#tasksModel.tasks;
   }
 
-  #handleTaskDrop(taskId, newStatus, afterTaskId) {
-      this.#tasksModel.updateTaskStatus(taskId, newStatus, afterTaskId);
-  }
-
-} 
+async #handleTaskDrop(taskId, newStatus) {
+        try {
+            await this.#tasksModel.updateTaskStatus(taskId, newStatus);
+        } catch (err) {
+            console.error('Ошибка при обновлении статуса задачи: ', err);
+        }
+    }
+}
     
