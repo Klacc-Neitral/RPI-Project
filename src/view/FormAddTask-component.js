@@ -7,7 +7,7 @@ function createFormAddtaskComponentTemplate() {
         `<div class="new-task-section">
             <h2>Новая задача</h2>
             <form class="add-task-form">
-                <input type="text" placeholder="Название задачи...">
+                <input class = "inputTask" type="text" placeholder="Название задачи...">
                 <button type="submit">Добавить</button>
             </form>
         </div>`

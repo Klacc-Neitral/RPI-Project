@@ -5,7 +5,7 @@ import { render } from "../framework/render.js";
 import { Status, StatusLabel } from "../const.js";
 import ClearButtonComponent from "../view/clearButt-Component.js";
 import PlugComponent from "../view/Plug-component.js";
-import LoadingViewComponent from "../view/loadingViewComponent.js";
+import LoadingViewComponent from "../view/LoadingViewComponent.js";
 import { UserAction } from "../const.js";
 
 export default class TaskBoardPresenter {
@@ -107,6 +107,7 @@ export default class TaskBoardPresenter {
         switch (event) {
             case UserAction.LOADING_START:
                 this.#showLoading();
+                this.#hideLoading();
                 break;
 
             case UserAction.LOADING_END:
