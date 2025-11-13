@@ -76,23 +76,37 @@ export default class TasksModel extends Observable {
         }
     }
 
-    async updateTaskStatus(taskId, newStatus) {
-        const task = this.#boardTasks.find(task => task.id === taskId);
+   async updateTaskStatus(taskId, newStatus) {
+        const taskIndex = this.#boardTasks.findIndex(task => task.id === taskId);
+
+        if (taskIndex === -1) {
+            return;
+        }
+
+        const task = this.#boardTasks[taskIndex];
         const previousStatus = task.status;
-        if (task) {
-            task.status = newStatus;
-            this._notify(UserAction.LOADING_START);
-            try {
-                const updatedTask = await this.#tasksApiService.updateTask(task);
-                Object.assign(task, updatedTask);
-                this._notify(UserAction.UPDATE_TASK, task);
-            } catch (err) {
-                console.error('Ошибка при обновлении статуса задачи на сервер: ', err);
-                task.status  = previousStatus;
-                throw err;
-            } finally {
-                this._notify(UserAction.LOADING_END);
-            }
+
+        this.#boardTasks.splice(taskIndex, 1);
+        task.status = newStatus;
+        this.#boardTasks.push(task);
+
+        this._notify(UserAction.LOADING_START);
+
+        try {
+            const updatedTask = await this.#tasksApiService.updateTask(task);
+            Object.assign(task, updatedTask);
+            this._notify(UserAction.UPDATE_TASK, task);
+        } catch (err) {
+            console.error('Ошибка при обновлении статуса задачи на сервер: ', err);
+
+            this.#boardTasks.pop();
+            task.status = previousStatus;
+            this.#boardTasks.splice(taskIndex, 0, task);
+
+
+            throw err;
+        } finally {
+            this._notify(UserAction.LOADING_END);
         }
     }
 }
